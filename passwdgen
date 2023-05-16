@@ -1,0 +1,53 @@
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+public class PasswordGenerator {
+    private static final String LOWERCASE_CHARACTERS = "abcdefghijklmnopqrstuvwxyz";
+    private static final String UPPERCASE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String NUMBERS = "0123456789";
+    private static final String SPECIAL_CHARACTERS = "!@#$%^&*()_-+=<>?";
+
+    public static String generatePassword(int length) {
+        StringBuilder password = new StringBuilder();
+
+        List<String> characterSets = Arrays.asList(
+                LOWERCASE_CHARACTERS,
+                UPPERCASE_CHARACTERS,
+                NUMBERS,
+                SPECIAL_CHARACTERS
+        );
+
+        Random random = new SecureRandom();
+
+        // Ensure that at least one character is picked from each character set
+        for (String characterSet : characterSets) {
+            password.append(characterSet.charAt(random.nextInt(characterSet.length())));
+        }
+
+        // Generate the remaining characters
+        int remainingLength = length - characterSets.size();
+        for (int i = 0; i < remainingLength; i++) {
+            String randomCharacterSet = characterSets.get(random.nextInt(characterSets.size()));
+            password.append(randomCharacterSet.charAt(random.nextInt(randomCharacterSet.length())));
+        }
+
+        // Shuffle the generated password
+        char[] passwordArray = password.toString().toCharArray();
+        for (int i = 0; i < password.length(); i++) {
+            int randomIndex = random.nextInt(password.length());
+            char temp = passwordArray[i];
+            passwordArray[i] = passwordArray[randomIndex];
+            passwordArray[randomIndex] = temp;
+        }
+
+        return new String(passwordArray);
+    }
+
+    public static void main(String[] args) {
+        int passwordLength = 10; // Specify the desired length of the password
+        String generatedPassword = generatePassword(passwordLength);
+        System.out.println("Generated Password: " + generatedPassword);
+    }
+}
