@@ -1,0 +1,37 @@
+#!/bin/bash
+
+##########################################
+# Author: Ruchitha
+# Date: 7th sept
+
+
+# version : v1
+
+# This script will track AWS resource usgae
+###############################################
+set -x
+
+# AWS s3
+# AWS EC2
+# AWS lambda
+# AWS IAM users
+
+# List s3 buckets
+echo "print list of s3 buckets"
+aws s3 ls > resourceTracker
+
+# List EC2 instances
+echo "print list of EC2 instances"
+aws ec2 describe-instances | jq .'Reservations[].Instances[].InstanceId'
+
+aws ec2 describe-instances
+
+# List Lambda functions
+echo "print list of Lambda functions"
+
+aws lambda list-functions  >> resourceTracker:q!
+
+
+# list IAM users
+echo "print list of IAM users"
+                                 
